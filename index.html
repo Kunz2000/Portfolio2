@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zhai Kun — 3D Design & Engineering</title>
+<meta name="description" content="Zhai Kun — 3D modeling, CAD design, simulation, product development and 3D visualization. Available worldwide, any time zone.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fffaf8;
+    --bg-2: #fbf1f3;
+    --panel: rgba(255, 255, 255, .82);
+    --line: rgba(122, 82, 120, .14);
+    --line-strong: rgba(214, 69, 122, .38);
+    --text: #4f4459;
+    --muted: #7d7186;
+    --ink: #2d1f3d;
+    --accent: #d6457a;
+    --accent-2: #9a7be0;
+    --peach: #f4a88c;
+    --gold: #c49a52;
+    --radius: 20px;
+    --shadow: 0 14px 40px rgba(152, 86, 128, .10);
+    --serif: "Playfair Display", Georgia, "Times New Roman", serif;
+    --mono: "JetBrains Mono", Consolas, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body { font-family: Inter, "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.65; overflow-x: hidden; }
+  img { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+  /* soft pastel glow + faint dotted grid behind the whole page */
+  body::before {
+    content: ""; position: fixed; inset: 0; z-index: -2; pointer-events: none;
+    background:
+      radial-gradient(900px 600px at 8% 0%, rgba(244,168,140,.20), transparent 60%),
+      radial-gradient(900px 700px at 100% 30%, rgba(154,123,224,.14), transparent 60%),
+      radial-gradient(800px 600px at 30% 100%, rgba(214,69,122,.09), transparent 60%),
+      radial-gradient(rgba(122,82,120,.10) 1px, transparent 1.2px) 0 0 / 26px 26px,
+      var(--bg);
+  }
+
+  /* scroll progress + nav */
+  #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 50; background: linear-gradient(90deg, var(--peach), var(--accent), var(--accent-2)); }
+  header.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 40; transition: background .3s, border-color .3s, box-shadow .3s; border-bottom: 1px solid transparent; }
+  header.nav.scrolled { background: rgba(255,250,248,.85); backdrop-filter: blur(14px); border-color: var(--line); box-shadow: 0 6px 24px rgba(152,86,128,.06); }
+  header.nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+  .brand { font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--ink); letter-spacing: .02em; }
+  .brand i { font-style: normal; color: var(--accent); }
+  nav a { margin-left: 30px; font-size: 14.5px; font-weight: 500; color: var(--muted); position: relative; }
+  nav a::after { content: ""; position: absolute; left: 0; bottom: -6px; height: 2px; width: 0; border-radius: 2px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .25s; }
+  nav a:hover { color: var(--ink); }
+  nav a:hover::after { width: 100%; }
+
+  /* hero */
+  .hero { position: relative; min-height: 100vh; display: flex; align-items: center; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; z-index: -1; background: url("images/hero-bg.jpg") center / cover no-repeat; opacity: .07; filter: grayscale(1); transform: scale(1.08); }
+  .hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(ellipse at 72% 50%, rgba(255,226,232,.55) 0%, transparent 55%), linear-gradient(180deg, transparent 70%, var(--bg) 100%); }
+  #wire { position: absolute; right: -4%; top: 50%; transform: translateY(-50%); width: min(62vw, 820px); height: min(62vw, 820px); z-index: -1; }
+  .hero .wrap { width: 100%; min-width: 0; padding-top: 90px; padding-bottom: 60px; }
+  .tagline { font-size: 13px; font-weight: 600; color: var(--accent); letter-spacing: .2em; text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px; padding: 8px 16px; border-radius: 999px; background: rgba(214,69,122,.08); border: 1px solid rgba(214,69,122,.18); }
+  .tagline::before { content: "✦"; font-size: 12px; }
+  .hero h1 { font-family: var(--serif); font-size: clamp(56px, 10vw, 132px); font-weight: 600; line-height: .98; letter-spacing: -.02em; color: var(--ink); margin: 26px 0 18px; }
+  .hero h1 .outline { font-style: italic; font-weight: 500; background: linear-gradient(100deg, var(--peach), var(--accent) 45%, var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; padding-right: .08em; }
+  .typed { font-size: clamp(20px, 2.6vw, 30px); font-weight: 600; color: var(--ink); min-height: 1.5em; }
+  .typed .word { background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .typed .caret { display: inline-block; width: 3px; height: 1em; background: var(--accent); margin-left: 4px; vertical-align: -3px; border-radius: 2px; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .hero p.lead { max-width: 560px; margin-top: 20px; font-size: 18px; color: var(--muted); }
+  .cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px; }
+  .btn { position: relative; display: inline-flex; align-items: center; gap: 10px; padding: 14px 28px; border-radius: 999px; font-weight: 600; font-size: 15px; overflow: hidden; transition: transform .2s, box-shadow .2s, background .2s; }
+  .btn.primary { background: linear-gradient(135deg, var(--accent), #b85fd0); color: #fff; box-shadow: 0 12px 30px rgba(214,69,122,.28); }
+  .btn.primary:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(214,69,122,.36); }
+  .btn.ghost { border: 1.5px solid var(--line-strong); color: var(--ink); background: rgba(255,255,255,.7); }
+  .btn.ghost:hover { background: #fff; transform: translateY(-2px); box-shadow: var(--shadow); }
+  .coords { position: absolute; left: 24px; bottom: 28px; font-family: var(--mono); font-size: 12px; color: rgba(125,113,134,.75); }
+  .scroll-hint { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); width: 24px; height: 40px; border: 1.5px solid rgba(214,69,122,.35); border-radius: 14px; }
+  .scroll-hint::after { content: ""; position: absolute; left: 50%; top: 8px; width: 3px; height: 8px; margin-left: -1.5px; border-radius: 2px; background: var(--accent); animation: wheel 1.8s infinite; }
+  @keyframes wheel { 0% { opacity: 0; transform: translateY(0); } 30% { opacity: 1; } 100% { opacity: 0; transform: translateY(14px); } }
+
+  /* marquee */
+  .marquee { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: linear-gradient(90deg, rgba(255,232,226,.7), rgba(243,236,255,.7)); overflow: hidden; padding: 22px 0; }
+  .track { display: flex; gap: 56px; width: max-content; animation: slide 38s linear infinite; }
+  .track span { font-family: var(--serif); font-style: italic; font-size: 20px; color: var(--ink); white-space: nowrap; display: inline-flex; align-items: center; gap: 56px; }
+  .track span::after { content: "✦"; font-style: normal; color: var(--accent); font-size: 12px; }
+  @keyframes slide { to { transform: translateX(-50%); } }
+
+  /* sections */
+  section { padding: 120px 0; position: relative; }
+  .head { max-width: 680px; margin-bottom: 56px; }
+  .label { font-size: 13px; font-weight: 600; color: var(--accent); letter-spacing: .2em; text-transform: uppercase; display: inline-flex; align-items: center; gap: 10px; }
+  .label::before { content: ""; width: 28px; height: 1.5px; background: linear-gradient(90deg, var(--peach), var(--accent)); }
+  .head h2 { font-family: var(--serif); font-weight: 600; font-size: clamp(34px, 4.6vw, 54px); line-height: 1.1; letter-spacing: -.01em; color: var(--ink); margin-top: 12px; }
+  .head h2 em { color: var(--accent); }
+  .head p { margin-top: 16px; font-size: 17px; color: var(--muted); }
+
+  /* stats */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 64px; }
+  .stat { padding: 26px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); box-shadow: var(--shadow); }
+  .stat b { display: block; font-family: var(--serif); font-size: 44px; font-weight: 600; color: var(--ink); line-height: 1.1; }
+  .stat b em { font-style: normal; color: var(--accent); }
+  .stat > span { font-size: 14px; color: var(--muted); }
+
+  /* about */
+  .about { display: grid; grid-template-columns: 1.15fr 1fr; gap: 64px; align-items: center; }
+  .about p { font-size: 17px; }
+  .about p + p { margin-top: 16px; }
+  .promise { display: grid; gap: 14px; }
+  .promise div { display: flex; gap: 16px; align-items: flex-start; padding: 20px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); box-shadow: var(--shadow); }
+  .promise svg { flex: none; width: 42px; height: 42px; padding: 9px; border-radius: 50%; stroke: var(--accent); background: rgba(214,69,122,.09); }
+  .promise b { color: var(--ink); display: block; }
+  .promise span { font-size: 14.5px; color: var(--muted); }
+
+  /* services */
+  .services { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .svc { position: relative; padding: 28px 24px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); box-shadow: var(--shadow); overflow: hidden; transition: border-color .3s, transform .3s, box-shadow .3s; }
+  .svc::before { content: ""; position: absolute; inset: 0; background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), rgba(214,69,122,.10), transparent 45%); opacity: 0; transition: opacity .3s; }
+  .svc:hover { border-color: var(--line-strong); transform: translateY(-4px); box-shadow: 0 22px 50px rgba(152,86,128,.16); }
+  .svc:hover::before { opacity: 1; }
+  .svc .n { font-family: var(--serif); font-style: italic; font-size: 22px; color: var(--accent); }
+  .svc h3 { font-size: 18px; color: var(--ink); margin: 10px 0 8px; }
+  .svc p { font-size: 14.5px; color: var(--muted); }
+
+  /* work */
+  .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 34px; }
+  .filters button { font: 500 14px Inter, sans-serif; color: var(--muted); background: rgba(255,255,255,.75); border: 1px solid var(--line); padding: 9px 20px; border-radius: 999px; cursor: pointer; transition: all .2s; }
+  .filters button:hover { color: var(--ink); border-color: var(--line-strong); }
+  .filters button.on { color: #fff; background: linear-gradient(135deg, var(--accent), #b85fd0); border-color: transparent; box-shadow: 0 8px 20px rgba(214,69,122,.25); }
+  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .tile { perspective: 900px; transition: opacity .35s, transform .35s; }
+  .tile.hide { display: none; }
+  .tile .inner { position: relative; border-radius: var(--radius); overflow: hidden; border: 6px solid #fff; background: #fff; cursor: zoom-in; box-shadow: var(--shadow); transform-style: preserve-3d; transition: transform .15s ease-out, box-shadow .3s; }
+  .tile .inner:hover { box-shadow: 0 26px 60px rgba(152,86,128,.24); }
+  .tile .ph { aspect-ratio: 4 / 3.2; overflow: hidden; border-radius: 14px; }
+  .tile img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+  .tile .inner:hover img { transform: scale(1.06); }
+  .tile .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 64px 20px 18px; border-radius: 0 0 14px 14px; background: linear-gradient(180deg, transparent, rgba(255,250,248,.96) 52%); }
+  .tile .cap small { font-size: 11.5px; font-weight: 600; color: var(--accent); letter-spacing: .1em; text-transform: uppercase; }
+  .tile .cap h3 { font-family: var(--serif); font-weight: 600; color: var(--ink); font-size: 20px; margin-top: 2px; }
+  .tile .cap p { font-size: 13.5px; color: var(--muted); max-height: 0; overflow: hidden; transition: max-height .4s, margin .4s; }
+  .tile .inner:hover .cap p { max-height: 80px; margin-top: 6px; }
+
+  /* tools */
+  .tools { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .tool { padding: 22px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); box-shadow: var(--shadow); }
+  .tool b { color: var(--ink); font-size: 17px; }
+  .tool span { display: block; font-size: 13.5px; color: var(--muted); margin: 2px 0 14px; }
+  .bar { height: 6px; border-radius: 6px; background: rgba(214,69,122,.10); overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--peach), var(--accent), var(--accent-2)); border-radius: 6px; transition: width 1.4s cubic-bezier(.2,.7,.2,1); }
+
+  /* process */
+  .process { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; position: relative; }
+  .process::before { content: ""; position: absolute; top: 25px; left: 10%; right: 10%; height: 1.5px; background: linear-gradient(90deg, transparent, var(--line-strong), transparent); }
+  .pstep { text-align: center; padding: 0 12px; }
+  .pstep .dot { position: relative; width: 50px; height: 50px; margin: 0 auto 18px; border-radius: 50%; display: grid; place-items: center; font-family: var(--serif); font-style: italic; font-size: 18px; color: #fff; background: linear-gradient(135deg, var(--peach), var(--accent) 55%, var(--accent-2)); box-shadow: 0 8px 20px rgba(214,69,122,.25); }
+  .pstep h4 { color: var(--ink); font-size: 17px; }
+  .pstep p { font-size: 14px; color: var(--muted); margin-top: 6px; }
+
+  /* contact */
+  .contact { text-align: center; }
+  .contact .box { position: relative; padding: 80px 32px; border-radius: 32px; border: 1px solid rgba(214,69,122,.2); background: radial-gradient(ellipse at 15% 0%, rgba(244,168,140,.30), transparent 55%), radial-gradient(ellipse at 90% 100%, rgba(154,123,224,.22), transparent 55%), #fff; box-shadow: 0 30px 70px rgba(152,86,128,.14); overflow: hidden; }
+  .contact h2 { font-family: var(--serif); font-weight: 600; font-size: clamp(34px, 5vw, 58px); color: var(--ink); line-height: 1.1; }
+  .contact p { max-width: 560px; margin: 18px auto 34px; font-size: 17px; color: var(--muted); }
+  .contact .cta { justify-content: center; }
+  .edu { margin-top: 34px; font-size: 13.5px; letter-spacing: .04em; color: var(--muted); }
+  footer { padding: 34px 0 44px; text-align: center; font-size: 13.5px; color: var(--muted); }
+
+  /* lightbox */
+  .lb { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: rgba(255,247,246,.94); backdrop-filter: blur(8px); opacity: 0; pointer-events: none; transition: opacity .3s; padding: 24px; }
+  .lb.open { opacity: 1; pointer-events: auto; }
+  .lb figure { max-width: min(1100px, 92vw); text-align: center; transform: scale(.96); transition: transform .3s; }
+  .lb.open figure { transform: scale(1); }
+  .lb img { max-height: 76vh; margin: 0 auto; border-radius: 16px; border: 6px solid #fff; box-shadow: 0 30px 70px rgba(152,86,128,.22); }
+  .lb figcaption { margin-top: 18px; font-family: var(--serif); font-size: 22px; color: var(--ink); font-weight: 600; }
+  .lb figcaption span { display: block; font-family: Inter, sans-serif; font-weight: 400; color: var(--muted); font-size: 14.5px; margin-top: 4px; }
+  .lb button { position: absolute; background: #fff; border: 1px solid var(--line); color: var(--ink); width: 48px; height: 48px; border-radius: 50%; font-size: 22px; cursor: pointer; box-shadow: var(--shadow); }
+  .lb button:hover { border-color: var(--accent); color: var(--accent); }
+  .lb .x { top: 22px; right: 22px; }
+  .lb .prev { left: 22px; top: 50%; transform: translateY(-50%); }
+  .lb .next { right: 22px; top: 50%; transform: translateY(-50%); }
+
+  /* reveal on scroll */
+  .reveal { opacity: 0; transform: translateY(34px); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 1000px) {
+    .services, .tools, .stats { grid-template-columns: repeat(2, 1fr); }
+    .gallery { grid-template-columns: repeat(2, 1fr); }
+    .about { grid-template-columns: 1fr; gap: 36px; }
+    .process { grid-template-columns: repeat(2, 1fr); row-gap: 34px; }
+    .process::before { display: none; }
+    #wire { opacity: .35; right: -25%; width: 110vw; height: 110vw; }
+  }
+  @media (max-width: 620px) {
+    nav { display: none; }
+    .wrap { padding: 0 16px; }
+    section { padding: 84px 0; }
+    .services, .tools, .gallery, .process { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    .stat b { font-size: 32px; }
+    .coords { display: none; }
+    .lb .prev, .lb .next { top: auto; bottom: 22px; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1; transform: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a href="#top" class="brand">Zhai<i>.</i>Kun</a>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#work">Work</a>
+      <a href="#tools">Tools</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-bg" id="heroBg"></div>
+  <canvas id="wire" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <span class="tagline">3D Design &amp; Engineering</span>
+    <h1>Zhai<br><span class="outline">Kun</span></h1>
+    <div class="typed" aria-live="polite">I deliver <span class="word" id="typed"></span><span class="caret"></span></div>
+    <p class="lead">From scratch to advanced professional development: precise CAD, refined shapes, and manufacturing-ready models. Your requirements come first.</p>
+    <div class="cta">
+      <a class="btn primary" href="#contact">Start a Project →</a>
+      <a class="btn ghost" href="#work">View Portfolio</a>
+    </div>
+  </div>
+  <div class="coords" id="coords">X 000.00 · Y 000.00 · Z 000.00</div>
+  <div class="scroll-hint" aria-hidden="true"></div>
+</section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="track">
+    <span>SolidWorks</span><span>CATIA</span><span>Siemens NX</span><span>Fusion 360</span><span>Rhino</span><span>3ds Max</span><span>Unreal Engine</span><span>CAD/CAM</span><span>PCB Design</span><span>Reverse Modeling</span>
+    <span>SolidWorks</span><span>CATIA</span><span>Siemens NX</span><span>Fusion 360</span><span>Rhino</span><span>3ds Max</span><span>Unreal Engine</span><span>CAD/CAM</span><span>PCB Design</span><span>Reverse Modeling</span>
+  </div>
+</div>
+
+<section id="about">
+  <div class="wrap">
+    <div class="about">
+      <div class="reveal">
+        <span class="label">About</span>
+        <div class="head" style="margin-bottom:26px"><h2>Engineering precision.<br><em>Designer's eye.</em></h2></div>
+        <p>I'm a 3D designer and CAD engineer who takes products from a blank page to production-ready models: concept modeling, detailed parametric CAD, engineering drawings, simulation, and high-quality visualization.</p>
+        <p>I start from what the client needs. Then I deliver accurate geometry, clean topology, and well-designed surfaces, with files ready for manufacturing, 3D printing, or rendering.</p>
+      </div>
+      <div class="promise reveal">
+        <div><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><p><b>Available in any time zone</b><span>Flexible hours, fast replies, and regular progress updates.</span></p></div>
+        <div><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg><p><b>Quality first</b><span>Accurate dimensions and refined shapes, with revisions until it's right.</span></p></div>
+        <div><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M4 12l5 5L20 6"/></svg><p><b>Client requirements first</b><span>Clear brief, agreed milestones, and no surprises at delivery.</span></p></div>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat reveal"><b><span class="count" data-to="8">0</span><em>+</em></b><span>Professional 3D / CAD tools</span></div>
+      <div class="stat reveal"><b><span class="count" data-to="1.3" data-dec="1">0</span><em>M</em></b><span>Faces in detailed sculpts</span></div>
+      <div class="stat reveal"><b><span class="count" data-to="24">0</span><em>/7</em></b><span>Time-zone coverage</span></div>
+      <div class="stat reveal"><b><span class="count" data-to="100">0</span><em>%</em></b><span>Client-requirement focus</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="label">Services</span>
+      <h2>Everything from idea to <em>manufacturing.</em></h2>
+      <p>End-to-end 3D and CAD work for products, parts, prototypes, and presentations.</p>
+    </div>
+    <div class="services">
+      <div class="svc reveal"><span class="n">01</span><h3>3D Modeling</h3><p>Accurate solid, surface, and organic models for products, parts, and characters.</p></div>
+      <div class="svc reveal"><span class="n">02</span><h3>CAD Design</h3><p>Parametric parts and assemblies, plus 2D drawings with sections and dimensions.</p></div>
+      <div class="svc reveal"><span class="n">03</span><h3>Simulation</h3><p>Motion, stress, and fit analysis to check designs before manufacturing.</p></div>
+      <div class="svc reveal"><span class="n">04</span><h3>Product Development</h3><p>Concept to production-ready design, with ergonomics and manufacturability in mind.</p></div>
+      <div class="svc reveal"><span class="n">05</span><h3>3D Visualization</h3><p>High-quality renders and real-time Unreal Engine scenes for marketing and pitches.</p></div>
+      <div class="svc reveal"><span class="n">06</span><h3>Reverse Modeling</h3><p>Recreating accurate CAD models from scans, photos, or physical samples.</p></div>
+      <div class="svc reveal"><span class="n">07</span><h3>PCB Design &amp; Modeling</h3><p>PCB layout plus 3D board and enclosure models for electronics products.</p></div>
+      <div class="svc reveal"><span class="n">08</span><h3>CAD/CAM &amp; 3D Print</h3><p>Manufacturing-ready output: STEP, IGES, STL, and toolpath-ready geometry.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="label">Portfolio</span>
+      <h2>Selected <em>work.</em></h2>
+      <p>Mechanical parts, consumer products, and high-detail sculpted models. Click any project to view it full size.</p>
+    </div>
+    <div class="filters reveal" id="filters">
+      <button class="on" data-f="all">All</button>
+      <button data-f="cad">CAD &amp; Engineering</button>
+      <button data-f="product">Product Design</button>
+      <button data-f="sculpt">Sculpts &amp; Visualization</button>
+    </div>
+    <div class="gallery" id="gallery"></div>
+  </div>
+</section>
+
+<section id="tools">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="label">Toolkit</span>
+      <h2>The right tool for <em>every job.</em></h2>
+    </div>
+    <div class="tools">
+      <div class="tool reveal"><b>SolidWorks</b><span>Parts, assemblies, drawings</span><div class="bar"><i data-w="98"></i></div></div>
+      <div class="tool reveal"><b>CATIA</b><span>Advanced surfacing</span><div class="bar"><i data-w="92"></i></div></div>
+      <div class="tool reveal"><b>Siemens NX</b><span>Engineering &amp; CAM</span><div class="bar"><i data-w="92"></i></div></div>
+      <div class="tool reveal"><b>Fusion 360</b><span>Product design</span><div class="bar"><i data-w="96"></i></div></div>
+      <div class="tool reveal"><b>Rhino</b><span>Freeform modeling</span><div class="bar"><i data-w="94"></i></div></div>
+      <div class="tool reveal"><b>3ds Max</b><span>Modeling &amp; rendering</span><div class="bar"><i data-w="95"></i></div></div>
+      <div class="tool reveal"><b>Unreal Engine</b><span>Real-time visualization</span><div class="bar"><i data-w="90"></i></div></div>
+      <div class="tool reveal"><b>CAD/CAM</b><span>Manufacturing output</span><div class="bar"><i data-w="94"></i></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="label">Process</span>
+      <h2>How we'll work <em>together.</em></h2>
+    </div>
+    <div class="process">
+      <div class="pstep reveal"><div class="dot">01</div><h4>Brief</h4><p>Understand your requirements, references, and constraints.</p></div>
+      <div class="pstep reveal"><div class="dot">02</div><h4>Concept</h4><p>Sketches and quick models to agree on the direction.</p></div>
+      <div class="pstep reveal"><div class="dot">03</div><h4>Model</h4><p>Precise CAD or 3D model with refined surfaces.</p></div>
+      <div class="pstep reveal"><div class="dot">04</div><h4>Validate</h4><p>Simulation, fit checks, and your feedback.</p></div>
+      <div class="pstep reveal"><div class="dot">05</div><h4>Deliver</h4><p>Native files, STEP/STL, drawings, and renders.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="wrap">
+    <div class="box reveal">
+      <span class="label">Contact</span>
+      <h2 style="margin-top:14px">Let's build your <em style="color:var(--accent)">next product.</em></h2>
+      <p>Send me your idea, sketch, or reference files. I'll reply with a clear plan, timeline, and quote, in any time zone.</p>
+      <div class="cta">
+        <!-- Replace these links with the real Upwork / Freelancer profile URLs -->
+        <!-- <a class="btn primary" href="https://www.upwork.com/" target="_blank" rel="noopener">Hire me on Upwork →</a> -->
+        <a class="btn primary" href="https://www.freelancer.com/u/kzhai/" target="_blank" rel="noopener">Hire me on Freelancer →</a>
+      </div>
+      <div class="edu">Northeastern University · Shenyang, China · 2015 – 2021</div>
+    </div>
+  </div>
+</section>
+
+<footer>© Zhai Kun · 3D Modeling · CAD Design · Simulation · Product Development · 3D Visualization</footer>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Project viewer">
+  <button class="x" id="lbClose" aria-label="Close">×</button>
+  <button class="prev" id="lbPrev" aria-label="Previous">‹</button>
+  <figure><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure>
+  <button class="next" id="lbNext" aria-label="Next">›</button>
+</div>
+
+<script>
+(function () {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- portfolio data ---------- */
+  const work = [
+    { img: 'hand-gripper-product', cat: 'product', tag: 'Product Design · Simulation', title: 'Adjustable Hand Gripper', text: 'Full product assembly with spring mechanism, resistance selector, and ergonomic two-tone grips, modeled for motion simulation.' },
+    { img: 'cad-3d-machine-part', cat: 'cad', tag: 'CAD · SolidWorks', title: 'Machine Part: 3D Solid', text: 'Parametric part with keyed bore, counterbored holes, and mounting bosses, ready for machining.' },
+    { img: 'cad-drawing-machine-part', cat: 'cad', tag: 'CAD · Engineering Drawing', title: 'Machine Part: 2D Drawing', text: 'Production drawing with section views A-A and B-B, centerlines, and hatching.' },
+    { img: 'fishing-tool-fusion360', cat: 'product', tag: 'Product Design · Fusion 360', title: 'Fishing Tool', text: 'Smooth ellipsoidal body with helical grooves, a precise freeform surface modeled in Fusion 360.' },
+    { img: 'character-sculpt', cat: 'sculpt', tag: '3D Visualization · Character', title: 'Armored Character & Staff', text: 'High-detail character sculpt with ornate armor and a ram-skull staff prop.' },
+    { img: 'statue-mesh', cat: 'sculpt', tag: 'Mesh · 3D Printing', title: 'Classical Statue', text: 'High-resolution statue mesh (455K faces) with fine drapery detail, prepared as STL.' },
+    { img: 'druid-figure', cat: 'sculpt', tag: 'Sculpt · 3D Printing', title: 'Druid Figure', text: 'Print-ready miniature with an owl and a branching staff, 1.3M faces.' },
+    { img: 'rogue-figure', cat: 'sculpt', tag: 'Sculpt · 3D Printing', title: 'Rogue Figure', text: 'Dynamic action pose with twin blades and a flowing cape, 1.1M faces.' },
+    { img: 'bard-figure', cat: 'sculpt', tag: 'Sculpt · 3D Printing', title: 'Bard Figure', text: 'Detailed miniature with a lute, layered clothing, and a backpack.' }
+  ];
+
+  const gallery = document.getElementById('gallery');
+  work.forEach((w, i) => {
+    const el = document.createElement('div');
+    el.className = 'tile reveal';
+    el.dataset.cat = w.cat;
+    el.innerHTML =
+      '<div class="inner" tabindex="0" role="button" aria-label="Open ' + w.title + '">' +
+        '<div class="ph"><img src="images/' + w.img + '.jpg" alt="' + w.title + '" loading="lazy"></div>' +
+        '<div class="cap"><small>' + w.tag + '</small><h3>' + w.title + '</h3><p>' + w.text + '</p></div>' +
+      '</div>';
+    const inner = el.querySelector('.inner');
+    inner.addEventListener('click', () => openLb(i));
+    inner.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLb(i); } });
+    if (!reduce) {
+      inner.addEventListener('mousemove', e => {
+        const r = inner.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+        inner.style.transform = 'rotateY(' + (x * 10) + 'deg) rotateX(' + (-y * 10) + 'deg)';
+      });
+      inner.addEventListener('mouseleave', () => { inner.style.transform = ''; });
+    }
+    gallery.appendChild(el);
+  });
+
+  /* ---------- filters ---------- */
+  let visible = work.map((_, i) => i);
+  document.getElementById('filters').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    document.querySelectorAll('#filters button').forEach(x => x.classList.toggle('on', x === b));
+    const f = b.dataset.f;
+    visible = [];
+    gallery.querySelectorAll('.tile').forEach((t, i) => {
+      const show = f === 'all' || t.dataset.cat === f;
+      t.classList.toggle('hide', !show);
+      if (show) { visible.push(i); t.classList.add('in'); }
+    });
+  });
+
+  /* ---------- lightbox ---------- */
+  const lb = document.getElementById('lb'), lbImg = document.getElementById('lbImg'), lbCap = document.getElementById('lbCap');
+  let cur = 0;
+  function show(i) {
+    cur = i; const w = work[i];
+    lbImg.src = 'images/' + w.img + '.jpg'; lbImg.alt = w.title;
+    lbCap.innerHTML = w.title + '<span>' + w.tag + ' · ' + w.text + '</span>';
+  }
+  function openLb(i) { show(i); lb.classList.add('open'); document.body.style.overflow = 'hidden'; document.getElementById('lbClose').focus(); }
+  function closeLb() { lb.classList.remove('open'); document.body.style.overflow = ''; }
+  function step(d) { const k = visible.indexOf(cur); show(visible[(k + d + visible.length) % visible.length]); }
+  document.getElementById('lbClose').onclick = closeLb;
+  document.getElementById('lbPrev').onclick = () => step(-1);
+  document.getElementById('lbNext').onclick = () => step(1);
+  lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLb();
+    if (e.key === 'ArrowLeft') step(-1);
+    if (e.key === 'ArrowRight') step(1);
+  });
+
+  /* ---------- typed specialties ---------- */
+  const words = ['3D Modeling', 'CAD Design', 'Simulation', 'Product Development', '3D Visualization', 'Reverse Modeling', 'PCB Design'];
+  const typed = document.getElementById('typed');
+  if (reduce) { typed.textContent = words.join(' · '); }
+  else {
+    let wi = 0, ci = 0, del = false;
+    (function tick() {
+      const w = words[wi];
+      ci += del ? -1 : 1;
+      typed.textContent = w.slice(0, ci);
+      let wait = del ? 40 : 85;
+      if (!del && ci === w.length) { del = true; wait = 1600; }
+      else if (del && ci === 0) { del = false; wi = (wi + 1) % words.length; wait = 300; }
+      setTimeout(tick, wait);
+    })();
+  }
+
+  /* ---------- reveal, counters, skill bars ---------- */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      const el = en.target;
+      el.classList.add('in');
+      el.querySelectorAll('.count').forEach(countUp);
+      el.querySelectorAll('.bar i').forEach(b => { b.style.width = b.dataset.w + '%'; });
+      io.unobserve(el);
+    });
+  }, { threshold: .15 });
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = (reduce ? 0 : (i % 4) * 90) + 'ms';
+    io.observe(el);
+  });
+  function countUp(el) {
+    const to = parseFloat(el.dataset.to), dec = +(el.dataset.dec || 0), t0 = performance.now(), dur = reduce ? 0 : 1600;
+    (function f(t) {
+      const p = dur ? Math.min(1, (t - t0) / dur) : 1, e = 1 - Math.pow(1 - p, 3);
+      el.textContent = (to * e).toFixed(dec);
+      if (p < 1) requestAnimationFrame(f);
+    })(t0);
+  }
+
+  /* ---------- service card glow follows cursor ---------- */
+  document.querySelectorAll('.svc').forEach(c => c.addEventListener('mousemove', e => {
+    const r = c.getBoundingClientRect();
+    c.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+    c.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  }));
+
+  /* ---------- nav state, progress bar, hero parallax ---------- */
+  const nav = document.getElementById('nav'), bar = document.getElementById('progress'), heroBg = document.getElementById('heroBg');
+  function onScroll() {
+    const y = window.scrollY, h = document.documentElement.scrollHeight - innerHeight;
+    nav.classList.toggle('scrolled', y > 30);
+    bar.style.width = (h > 0 ? y / h * 100 : 0) + '%';
+    if (!reduce) heroBg.style.transform = 'scale(1.08) translateY(' + (y * .25) + 'px)';
+  }
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  /* ---------- rotating 3D wireframe (icosahedron inside a torus) ---------- */
+  const cv = document.getElementById('wire'), ctx = cv.getContext('2d'), coords = document.getElementById('coords');
+  let W = 0, H = 0, dpr = Math.min(devicePixelRatio || 1, 2);
+  function size() { const r = cv.getBoundingClientRect(); W = r.width; H = r.height; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+  addEventListener('resize', size); size();
+
+  const phi = (1 + Math.sqrt(5)) / 2;
+  const ico = [[-1, phi, 0], [1, phi, 0], [-1, -phi, 0], [1, -phi, 0], [0, -1, phi], [0, 1, phi], [0, -1, -phi], [0, 1, -phi], [phi, 0, -1], [phi, 0, 1], [-phi, 0, -1], [-phi, 0, 1]]
+    .map(v => v.map(c => c / Math.hypot(1, phi) * .62));
+  const icoEdges = [];
+  for (let i = 0; i < 12; i++) for (let j = i + 1; j < 12; j++) {
+    const d = Math.hypot(ico[i][0] - ico[j][0], ico[i][1] - ico[j][1], ico[i][2] - ico[j][2]);
+    if (d < .7) icoEdges.push([i, j]);
+  }
+  const R = 1.05, r = .28, U = 28, V = 12, torus = [];
+  for (let u = 0; u < U; u++) for (let v = 0; v < V; v++) {
+    const a = u / U * Math.PI * 2, b = v / V * Math.PI * 2;
+    torus.push([(R + r * Math.cos(b)) * Math.cos(a), r * Math.sin(b), (R + r * Math.cos(b)) * Math.sin(a)]);
+  }
+
+  let mx = 0, my = 0, ax = .5, ay = 0;
+  addEventListener('mousemove', e => {
+    mx = e.clientX / innerWidth - .5; my = e.clientY / innerHeight - .5;
+    coords.textContent = 'X ' + (mx * 200).toFixed(2).padStart(7, '0') + ' · Y ' + (-my * 200).toFixed(2).padStart(7, '0') + ' · Z ' + (ax * 10).toFixed(2).padStart(6, '0');
+  });
+
+  function rot(p, rx, ry) {
+    let [x, y, z] = p;
+    let c = Math.cos(ry), s = Math.sin(ry); [x, z] = [x * c + z * s, -x * s + z * c];
+    c = Math.cos(rx); s = Math.sin(rx); [y, z] = [y * c - z * s, y * s + z * c];
+    return [x, y, z];
+  }
+  function proj(p) { const k = 2.6 / (2.6 + p[2]); return [W / 2 + p[0] * k * W * .36, H / 2 + p[1] * k * W * .36, k]; }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    const rx = ax + my * .6, ry = ay + mx * .8;
+    // torus mesh lines (soft lavender)
+    const tp = torus.map(p => proj(rot(rot(p, .9, 0), rx * .6, ry * .6)));
+    ctx.lineWidth = 1;
+    for (let u = 0; u < U; u++) for (let v = 0; v < V; v++) {
+      const i = u * V + v, a = tp[i], b = tp[u * V + (v + 1) % V], c = tp[((u + 1) % U) * V + v];
+      const alpha = Math.max(.06, Math.min(.5, (a[2] - .75) * 1.6));
+      ctx.strokeStyle = 'rgba(154,123,224,' + alpha * .8 + ')';
+      ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.moveTo(a[0], a[1]); ctx.lineTo(c[0], c[1]); ctx.stroke();
+    }
+    // icosahedron core (rose)
+    const ip = ico.map(p => proj(rot(p, rx, ry)));
+    ctx.lineWidth = 1.8; ctx.shadowColor = 'rgba(214,69,122,.45)'; ctx.shadowBlur = 10;
+    icoEdges.forEach(([i, j]) => {
+      const a = ip[i], b = ip[j], alpha = Math.max(.3, Math.min(1, (a[2] + b[2]) / 2 - .3));
+      ctx.strokeStyle = 'rgba(214,69,122,' + alpha + ')';
+      ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+    });
+    ctx.shadowBlur = 0;
+    ip.forEach(p => { ctx.fillStyle = 'rgba(244,168,140,.95)'; ctx.beginPath(); ctx.arc(p[0], p[1], 3 * p[2], 0, Math.PI * 2); ctx.fill(); });
+    // dimension line for a technical-drawing touch
+    ctx.strokeStyle = 'rgba(196,154,82,.6)'; ctx.fillStyle = 'rgba(176,132,62,.9)'; ctx.lineWidth = 1;
+    const y0 = H * .9, x0 = W * .2, x1 = W * .8;
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y0); ctx.moveTo(x0, y0 - 8); ctx.lineTo(x0, y0 + 8); ctx.moveTo(x1, y0 - 8); ctx.lineTo(x1, y0 + 8); ctx.stroke();
+    ctx.font = '12px "JetBrains Mono", Consolas, monospace'; ctx.textAlign = 'center';
+    ctx.fillText('Ø ' + (240 + Math.sin(ay) * 2).toFixed(2) + ' mm', W / 2, y0 - 10);
+    if (!reduce) { ay += .0045; ax += .0018; requestAnimationFrame(draw); }
+  }
+  draw();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#2d1f3d; --text:#4f4459; --muted:#7d7186; --rose:#d6457a; --lav:#9a7be0; --peach:#f4a88c; --gold:#c49a52;
+          --serif:"Playfair Display", Georgia, serif; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:1920px; height:1080px; overflow:hidden; }
+  body { font-family: Inter, "Segoe UI", sans-serif; color:var(--text); position:relative;
+    background:
+      radial-gradient(900px 700px at 0% 0%, rgba(244,168,140,.38), transparent 60%),
+      radial-gradient(1000px 800px at 100% 100%, rgba(154,123,224,.30), transparent 60%),
+      radial-gradient(700px 600px at 72% 18%, rgba(214,69,122,.14), transparent 60%),
+      linear-gradient(120deg, #fff8f5 0%, #fdf2f5 50%, #f5f0ff 100%); }
+  .dots { position:absolute; inset:0; background: radial-gradient(rgba(122,82,120,.13) 1.2px, transparent 1.5px) 0 0 / 28px 28px;
+    -webkit-mask: linear-gradient(90deg, transparent 0%, #000 40%, #000 100%); }
+  svg.deco { position:absolute; inset:0; }
+
+  .left { position:absolute; left:120px; top:118px; width:930px; }
+  .pill { display:inline-flex; align-items:center; gap:12px; padding:10px 22px; border-radius:999px; font-size:17px; font-weight:600;
+    letter-spacing:.22em; text-transform:uppercase; color:var(--rose); background:rgba(214,69,122,.08); border:1.5px solid rgba(214,69,122,.22); }
+  h1 { font-family:var(--serif); font-weight:600; font-size:168px; line-height:1; color:var(--ink); letter-spacing:-.02em; margin:34px 0 10px; }
+  h1 em { font-weight:500; background:linear-gradient(100deg, var(--peach), var(--rose) 45%, var(--lav)); -webkit-background-clip:text; background-clip:text; color:transparent; padding-right:.06em; }
+  .role { font-size:34px; font-weight:600; color:var(--ink); display:flex; align-items:center; gap:18px; }
+  .role i { width:8px; height:8px; border-radius:50%; background:var(--rose); display:inline-block; }
+  .lead { font-size:22px; color:var(--muted); margin-top:16px; max-width:820px; line-height:1.55; }
+
+  .stats { display:grid; grid-template-columns:repeat(4, 1fr); gap:18px; margin-top:44px; }
+  .stat { background:rgba(255,255,255,.85); border:1px solid rgba(122,82,120,.12); border-radius:22px; padding:22px 22px 20px; box-shadow:0 14px 34px rgba(152,86,128,.10); }
+  .stat b { display:block; font-family:var(--serif); font-size:46px; font-weight:600; color:var(--ink); line-height:1.05; }
+  .stat b em { font-style:normal; color:var(--rose); }
+  .stat span { font-size:16px; color:var(--muted); line-height:1.35; display:block; margin-top:4px; }
+
+  .skills-h { margin-top:40px; font-size:15px; font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:var(--rose); display:flex; align-items:center; gap:12px; }
+  .skills-h::before { content:""; width:34px; height:2px; background:linear-gradient(90deg, var(--peach), var(--rose)); }
+  .chips { display:flex; flex-wrap:wrap; gap:12px; margin-top:16px; }
+  .chip { font-size:19px; font-weight:500; color:var(--ink); padding:10px 20px; border-radius:999px; background:#fff; border:1px solid rgba(214,69,122,.2); box-shadow:0 6px 16px rgba(152,86,128,.07); }
+  .chip.hl { color:#fff; border-color:transparent; background:linear-gradient(135deg, var(--rose), #b85fd0); }
+  .tools { margin-top:22px; font-size:19px; color:var(--muted); letter-spacing:.01em; }
+  .tools b { color:var(--ink); font-weight:600; }
+  .tools s { text-decoration:none; color:var(--rose); margin:0 10px; }
+
+  /* single featured visual */
+  .stage { position:absolute; right:110px; top:130px; width:700px; height:820px; }
+  .ring { position:absolute; left:50%; top:50%; width:760px; height:760px; transform:translate(-50%,-50%); border-radius:50%;
+    background:radial-gradient(circle, rgba(255,255,255,.9) 0%, rgba(255,228,236,.6) 45%, transparent 70%); }
+  .card { position:absolute; background:#fff; border-radius:30px; padding:10px; box-shadow:0 30px 70px rgba(122,62,110,.22); }
+  .card img { display:block; width:100%; height:100%; object-fit:cover; border-radius:22px; }
+  .main { left:70px; top:40px; width:560px; height:640px; }
+  .main .cap { position:absolute; left:10px; right:10px; bottom:10px; padding:70px 28px 24px; border-radius:0 0 22px 22px;
+    background:linear-gradient(180deg, transparent, rgba(255,250,248,.97) 55%); }
+  .cap small { font-size:14px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--rose); }
+  .cap h3 { font-family:var(--serif); font-size:32px; font-weight:600; color:var(--ink); margin-top:2px; }
+  .mini1 { left:-20px; top:250px; width:220px; height:220px; transform:rotate(-5deg); }
+  .mini2 { right:-30px; top:-10px; width:230px; height:270px; transform:rotate(5deg); }
+  .badge { position:absolute; right:-10px; bottom:40px; display:flex; align-items:center; gap:14px; background:#fff; border-radius:999px;
+    padding:14px 26px 14px 16px; box-shadow:0 20px 50px rgba(122,62,110,.2); font-size:18px; font-weight:600; color:var(--ink); }
+  .badge i { width:40px; height:40px; border-radius:50%; display:grid; place-items:center; font-style:normal; color:#fff; font-size:18px;
+    background:linear-gradient(135deg, var(--peach), var(--rose) 55%, var(--lav)); }
+  .badge span { display:block; font-size:14px; font-weight:500; color:var(--muted); }
+
+  .foot { position:absolute; left:120px; right:110px; bottom:52px; display:flex; justify-content:space-between; align-items:center;
+    font-size:17px; color:var(--muted); border-top:1px solid rgba(122,82,120,.14); padding-top:22px; }
+  .foot b { color:var(--ink); font-weight:600; }
+  .foot .sp { color:var(--rose); margin:0 12px; }
+</style></head>
+<body>
+<div class="dots"></div>
+<svg class="deco" viewBox="0 0 1920 1080" fill="none">
+  <!-- soft technical-drawing accents -->
+  <circle cx="1460" cy="540" r="452" stroke="rgba(196,154,82,.35)" stroke-width="1.2" stroke-dasharray="3 9"/>
+  <circle cx="1460" cy="540" r="500" stroke="rgba(154,123,224,.22)" stroke-width="1"/>
+  <path d="M1040 70 H1210 M1040 62 V78 M1210 62 V78" stroke="rgba(196,154,82,.55)" stroke-width="1.2"/>
+  <text x="1125" y="58" fill="rgba(176,132,62,.85)" font-family="Consolas, monospace" font-size="14" text-anchor="middle">Ø 240.00 mm</text>
+  <g fill="#d6457a" opacity=".55"><path d="M1090 980 l5 12 12 5 -12 5 -5 12 -5 -12 -12 -5 12 -5z"/></g>
+  <g fill="#9a7be0" opacity=".5"><path d="M1840 150 l4 9 9 4 -9 4 -4 9 -4 -9 -9 -4 9 -4z"/></g>
+  <g fill="#f4a88c" opacity=".8"><path d="M70 640 l4 10 10 4 -10 4 -4 10 -4 -10 -10 -4 10 -4z"/></g>
+</svg>
+
+<div class="left">
+  <span class="pill">✦ 3D Design &amp; CAD Engineering</span>
+  <h1>Zhai <em>Kun</em></h1>
+  <div class="role">3D Designer <i></i> CAD Engineer <i></i> Product Developer</div>
+  <p class="lead">From concept to manufacturing-ready models: precise CAD, refined surfaces, simulation, and high-quality visualization.</p>
+
+  <div class="stats">
+    <div class="stat"><b>8<em>+</em></b><span>Professional 3D / CAD tools</span></div>
+    <div class="stat"><b>1.3<em>M</em></b><span>Faces in detailed sculpts</span></div>
+    <div class="stat"><b>24<em>/7</em></b><span>Any time zone, worldwide</span></div>
+    <div class="stat"><b>NEU<em>.</em></b><span>Northeastern University, 2015–2021</span></div>
+  </div>
+
+  <div class="skills-h">Professional skills</div>
+  <div class="chips">
+    <span class="chip hl">3D Modeling</span><span class="chip hl">CAD Design</span><span class="chip">Simulation</span>
+    <span class="chip">Product Development</span><span class="chip">3D Visualization</span><span class="chip">Reverse Modeling</span>
+    <span class="chip">PCB Design</span><span class="chip">CAD/CAM &amp; 3D Print</span>
+  </div>
+  <div class="tools"><b>SolidWorks</b><s>·</s><b>CATIA</b><s>·</s><b>Siemens NX</b><s>·</s><b>Fusion 360</b><s>·</s><b>Rhino</b><s>·</s><b>3ds Max</b><s>·</s><b>Unreal Engine</b></div>
+</div>
+
+<div class="stage">
+  <div class="ring"></div>
+  <div class="card mini2"><img src="file:///D:/Zhai_Kun_Portfolio/images/cad-3d-machine-part.jpg"></div>
+  <div class="card main">
+    <img src="file:///D:/Zhai_Kun_Portfolio/images/hand-gripper-product.jpg">
+    <div class="cap"><small>Featured · Product Design &amp; Simulation</small><h3>Adjustable Hand Gripper</h3></div>
+  </div>
+  <div class="card mini1"><img src="file:///D:/Zhai_Kun_Portfolio/images/druid-figure.jpg"></div>
+  <div class="badge"><i>✓</i><div>Client requirements first<span>Quality-focused · revisions until it's right</span></div></div>
+</div>
+
+<div class="foot">
+  <div><b>Concept</b><span class="sp">→</span><b>CAD</b><span class="sp">→</span><b>Simulation</b><span class="sp">→</span><b>Manufacturing</b></div>
+  <div>STEP · IGES · STL · Engineering drawings · Renders</div>
+</div>
+</body></html>
